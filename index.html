@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Tagihan Air & Energi</title>
+  <title>Tagihan Air</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" type="image/png" href="img-removebg-preview.png">
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-blue-700 min-h-screen flex items-center justify-center p-6">
 
   <div class="container-box">
@@ -15,7 +16,7 @@
       <img src="img-removebg-preview.png" alt="Logo" class="logo">
     </div>
 
-    <h2 class="title">Aplikasi Tagihan Air & Energi</h2>
+    <h2 class="title">Tagihan Air</h2>
 
     <div class="space-y-4">
       <div>
@@ -45,10 +46,12 @@
     </div>
   </div>
 
+  <!-- SCRIPT PERHITUNGAN + SIMPAN GOOGLE SHEET -->
   <script>
     const debitInput = document.getElementById("debitAir");
     const layananSelect = document.getElementById("jenisLayanan");
     const totalPembayaranInput = document.getElementById("totalPembayaran");
+    const simpanBtn = document.getElementById("simpanBtn");
 
     function hitungTagihan() {
       const debit = parseFloat(debitInput.value) || 0;
@@ -64,7 +67,38 @@
 
     debitInput.addEventListener("input", hitungTagihan);
     layananSelect.addEventListener("change", hitungTagihan);
+
+    // ================================
+    //     SIMPAN KE GOOGLE SHEET
+    // ================================
+
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz5lIi7xuA8qAdPgNBM3HUdB1lA-iGA9Sn9tS8WZq8n-S3GTDNhmUks6-ovWOpl7wQB/exec";
+
+    simpanBtn.addEventListener("click", () => {
+      const data = {
+        nama: document.getElementById("namaPelanggan").value,
+        layanan: layananSelect.value,
+        pemakaian: debitInput.value,
+        total: totalPembayaranInput.value
+      };
+
+      fetch(scriptURL, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" }
+      })
+      .then(response => response.text())
+      .then(result => {
+        alert("Data berhasil disimpan ke Google Sheet!");
+      })
+      .catch(error => {
+        alert("Gagal menyimpan data.");
+        console.error("Error:", error);
+      });
+    });
   </script>
 
 </body>
 </html>
+
+    
