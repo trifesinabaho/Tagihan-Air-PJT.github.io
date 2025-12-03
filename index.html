@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplikasi Tagihan Air & Energi</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="img-removebg-preview.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-700 min-h-screen flex items-center justify-center p-6">
+
+  <div class="container-box">
+    <div class="flex justify-center mb-6">
+      <img src="img-removebg-preview.png" alt="Logo" class="logo">
+    </div>
+
+    <h2 class="title">Aplikasi Tagihan Air & Energi</h2>
+
+    <div class="space-y-4">
+      <div>
+        <label class="label">Nama Pelanggan</label>
+        <input id="namaPelanggan" type="text" class="input">
+      </div>
+
+      <div>
+        <label class="label">Jenis Layanan</label>
+        <select id="jenisLayanan" class="input">
+          <option value="pdam">PDAM – Rp 10.000 / m³</option>
+          <option value="plta">PLTA – Rp 27.000 / kWh</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="label">Pemakaian (m³ / kWh)</label>
+        <input id="debitAir" type="number" class="input">
+      </div>
+
+      <div>
+        <label class="label">Total Pembayaran (Rp)</label>
+        <input id="totalPembayaran" type="text" disabled class="input total">
+      </div>
+
+      <button id="simpanBtn" class="btn">Simpan ke Google Sheet</button>
+    </div>
+  </div>
+
+  <script>
+    const debitInput = document.getElementById("debitAir");
+    const layananSelect = document.getElementById("jenisLayanan");
+    const totalPembayaranInput = document.getElementById("totalPembayaran");
+
+    function hitungTagihan() {
+      const debit = parseFloat(debitInput.value) || 0;
+      const layanan = layananSelect.value;
+
+      let tarif = 0;
+      if (layanan === "pdam") tarif = 10000;
+      if (layanan === "plta") tarif = 27000;
+
+      const total = debit * tarif;
+      totalPembayaranInput.value = total.toLocaleString("id-ID");
+    }
+
+    debitInput.addEventListener("input", hitungTagihan);
+    layananSelect.addEventListener("change", hitungTagihan);
+  </script>
+
+</body>
+</html>
